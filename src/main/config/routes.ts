@@ -17,7 +17,7 @@ export default (app: Express): void => {
   getFiles(join(__dirname, '/../routes'))
     .then(files => {
       files.map(async filePath => {
-        if (!filePath.includes('.test.')) {
+        if (!filePath.includes('.test.') && !filePath.includes('.map')) {
           (await import(filePath)).default(router)
         }
       })
