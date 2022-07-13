@@ -15,7 +15,6 @@ jobs:
         node-version: 14.x
         cache: 'npm'
     - run: npm install
-    - run: npx eslint './src/**/*.{ts,tsx}'
     - run: npm run test:ci
 
     - name: Coveralls
