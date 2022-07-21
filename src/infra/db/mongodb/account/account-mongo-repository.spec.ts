@@ -1,6 +1,6 @@
-import { Collection } from 'mongodb'
-import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
+import { MongoHelper } from '../helpers/mongo-helper'
+import { Collection } from 'mongodb'
 
 // file deepcode ignore HardcodedNonCryptoSecret: Test Purpose
 // file deepcode ignore NoHardcodedPasswords:  Test Purpose

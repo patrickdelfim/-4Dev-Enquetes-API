@@ -1,7 +1,7 @@
 import { LoginController } from './login-controller'
-import { badRequest, ok, serverError, unauthorized } from '../../../helpers/http/http-helper'
-import { MissingParamError } from '../../../errors'
 import { HttpRequest, Authentication, Validation, AuthenticationModel } from './login-controller-protocols'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { MissingParamError } from '@/presentation/errors'
 // file deepcode ignore HardcodedNonCryptoSecret: tests purpose
 
 const makeAuthentication = (): Authentication => {
