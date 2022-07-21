@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/main/server.js",
+    "startLocalBd": "sudo service mongod start",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
     "build:watch": "tsc -w",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
