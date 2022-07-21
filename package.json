@@ -9,7 +9,7 @@
     "build:watch": "tsc -w",
     "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "down": "docker-compose down",
-    "up": "npm run build && docker-compose up -d",
+    "up": "npm run build && DOCKER_BUILDKIT=1 docker-compose up -d",
     "test": "jest --passWithNoTests --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit.config.js",
