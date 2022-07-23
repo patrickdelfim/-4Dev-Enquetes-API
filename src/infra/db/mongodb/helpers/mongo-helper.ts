@@ -18,6 +18,10 @@ export const MongoHelper = {
   map (data: any): any {
     const { _id, ...rest } = data
     return { id: _id.toHexString(), ...rest }
+  },
+
+  mapCollection (data: any[]): any[] {
+    return data.map(item => MongoHelper.map(item))
   }
 
 }
