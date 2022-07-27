@@ -1,7 +1,30 @@
 import app from '@/main/config/app'
+import env from '@/main/config/env'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { Collection, ObjectId } from 'mongodb'
 import request from 'supertest'
+import { sign } from 'jsonwebtoken'
 
+let surveyCollection: Collection
+let accountCollection: Collection
+
+const makeAccessToken = async (): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'Patrick',
+    email: 'patrickdelfim@gmail.com',
+    password: '123'
+  })
+  const id = res.insertedId.toString()
+  const accessToken = sign({ id }, env.jwtSecret)
+  await accountCollection.updateOne({
+    _id: new ObjectId(id)
+  }, {
+    $set: {
+      accessToken
+    }
+  })
+  return accessToken
+}
 describe('Survey Routes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(global.__MONGO_URI__)
@@ -9,6 +32,13 @@ describe('Survey Routes', () => {
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    surveyCollection = await MongoHelper.getCollection('surveys')
+    await surveyCollection.deleteMany({})
+    accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.deleteMany({})
   })
 
   describe('PUT /surveys/:surveyId/results', () => {
@@ -19,6 +49,27 @@ describe('Survey Routes', () => {
           answer: 'any_answer'
         })
         .expect(403)
+    })
+    test('should return 200 on save survey result with accessToken', async () => {
+      const accessToken = await makeAccessToken()
+      const res = await surveyCollection.insertOne({
+        question: 'Question',
+        answers: [{
+          answer: 'Answer1',
+          image: 'http://image-name.com'
+        }, {
+          answer: 'Answer2'
+        }],
+        date: new Date()
+      })
+
+      await request(app)
+        .put(`/api/surveys/${res.insertedId.toString()}/results`)
+        .set('x-access-token', accessToken)
+        .send({
+          answer: 'Answer1'
+        })
+        .expect(200)
     })
   })
 })
