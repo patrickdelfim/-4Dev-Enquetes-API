@@ -181,6 +181,6 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
       .build()
 
     const surveyResult = await surveyResultCollection.aggregate(query).toArray() as SurveyResultModel[]
-    return surveyResult?.length ? { ...surveyResult[0], surveyId: surveyResult[0].surveyId.toString() } : null
+    return surveyResult.length ? { ...surveyResult[0], surveyId: surveyResult[0].surveyId.toString() } : null
   }
 }
